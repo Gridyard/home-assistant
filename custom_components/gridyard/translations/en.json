@@ -1,0 +1,18 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Enter the address of your gridyard device in your home network.",
+        "data": {
+          "host": "Host"
+        },
+        "data_description": {
+          "host": "The IP address or host name of the device."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect"
+    }
+  }
+}
