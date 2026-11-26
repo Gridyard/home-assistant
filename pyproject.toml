@@ -1,0 +1,32 @@
+# Lint rules follow https://github.com/ludeeus/integration_blueprint/blob/main/.ruff.toml
+
+[tool.ruff]
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN401", # Dynamically typed expressions (typing.Any) are disallowed
+    "ARG001", # Home Assistant calls setup functions with a fixed signature
+    "COM812", # incompatible with the formatter
+    "CPY001", # the license is in LICENSE, not in file headers
+    "D203",   # incompatible with the formatter
+    "D212",   # incompatible with the formatter
+    "ISC001", # incompatible with the formatter
+    "TC001",  # Home Assistant Core ignores TC001 to TC003
+    "TC002",
+    "TC003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"] # pytest uses assert
+
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
