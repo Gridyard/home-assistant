@@ -8,6 +8,6 @@
   "integration_type": "device",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/Gridyard/home-assistant/issues",
-  "requirements": [],
+  "requirements": ["gridyard==0.1.0"],
   "version": "0.0.1"
 }

@@ -9,10 +9,26 @@
         "data_description": {
           "host": "Die IP-Adresse oder der Hostname des Geräts."
         }
+      },
+      "setup_code": {
+        "description": "Gib den Setup-Code vom Etikett des Geräts ein.",
+        "data": {
+          "setup_code": "Setup-Code"
+        },
+        "data_description": {
+          "setup_code": "12 Zeichen. Groß- und Kleinschreibung, Leerzeichen und Bindestriche spielen keine Rolle."
+        }
       }
     },
     "error": {
-      "cannot_connect": "Verbindung fehlgeschlagen"
+      "api_unsupported": "Die Firmware des Geräts unterstützt Home Assistant noch nicht. Aktualisiere zuerst das Gerät.",
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "invalid_auth": "Das Gerät hat den Setup-Code abgelehnt",
+      "invalid_setup_code": "Ein Setup-Code hat 12 Zeichen: Ziffern und Buchstaben außer I, L, O und U",
+      "unknown": "Unerwarteter Fehler"
+    },
+    "abort": {
+      "already_configured": "Das Gerät ist bereits eingerichtet"
     }
   }
 }
