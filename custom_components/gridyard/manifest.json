@@ -1,6 +1,7 @@
 {
   "domain": "gridyard",
   "name": "gridyard",
+  "categories": ["energy.meters_monitoring"],
   "codeowners": ["@lukaslorenzz"],
   "config_flow": true,
   "documentation": "https://github.com/Gridyard/home-assistant",
