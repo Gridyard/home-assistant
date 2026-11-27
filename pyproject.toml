@@ -10,6 +10,7 @@ ignore = [
     "ARG001", # Home Assistant calls setup functions and flow steps with a fixed signature
     "ARG002",
     "ARG004",
+    "FBT001", # Home Assistant passes booleans positionally (update install: backup)
     "COM812", # incompatible with the formatter
     "CPY001", # the license is in LICENSE, not in file headers
     "D203",   # incompatible with the formatter
