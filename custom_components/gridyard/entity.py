@@ -19,7 +19,7 @@ class GridyardEntity(CoordinatorEntity[GridyardCoordinator]):
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, device.device_id)},
             manufacturer="gridyard",
-            model=coordinator.model,
+            model=device.model,
             model_id=device.profile_id,
             name=coordinator.config_entry.title,
             sw_version=device.firmware,

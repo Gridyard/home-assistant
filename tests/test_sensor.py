@@ -6,6 +6,7 @@ from unittest.mock import AsyncMock
 import pytest
 from freezegun.api import FrozenDateTimeFactory
 from gridyard import CannotConnect, Quality, State
+from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import STATE_UNAVAILABLE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
@@ -13,6 +14,7 @@ from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant_custom_component.common import (
     MockConfigEntry,
     async_fire_time_changed,
+    load_json_object_fixture,
     snapshot_platform,
 )
 from syrupy.assertion import SnapshotAssertion
@@ -51,14 +53,16 @@ async def test_sensors(
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
 
-@pytest.mark.usefixtures("mock_gridyard_client")
 async def test_device(
     hass: HomeAssistant,
     device_registry: dr.DeviceRegistry,
     mock_config_entry: MockConfigEntry,
+    mock_gridyard_client: AsyncMock,
 ) -> None:
     """Test the device shows the meter model of the active profile."""
     await setup_integration(hass, mock_config_entry)
+
+    mock_gridyard_client.profiles.assert_not_called()
 
     device = device_registry.async_get_device_by_identifier(
         (DOMAIN, DEVICE_ID), mock_config_entry.entry_id
@@ -73,22 +77,18 @@ async def test_device(
 
 async def test_device_without_profile(
     hass: HomeAssistant,
-    device_registry: dr.DeviceRegistry,
+    entity_registry: er.EntityRegistry,
     mock_config_entry: MockConfigEntry,
-    mock_gridyard_client: AsyncMock,
+    device_without_profile: AsyncMock,
 ) -> None:
-    """Test a device without profile has no model and the catalog is not read."""
-    info = mock_gridyard_client.device_info.return_value
-    mock_gridyard_client.device_info.return_value = replace(info, profile_id=None)
-
+    """Test a device without profile and live record loads without sensors."""
     await setup_integration(hass, mock_config_entry)
 
-    device = device_registry.async_get_device_by_identifier(
-        (DOMAIN, DEVICE_ID), mock_config_entry.entry_id
+    assert mock_config_entry.state is ConfigEntryState.LOADED
+    assert not er.async_entries_for_config_entry(
+        entity_registry, mock_config_entry.entry_id
     )
-    assert device is not None
-    assert device.model is None
-    mock_gridyard_client.profiles.assert_not_called()
+    device_without_profile.profiles.assert_not_called()
 
 
 @pytest.mark.parametrize(
@@ -143,7 +143,9 @@ async def test_sensors_added_later(
 ) -> None:
     """Test sensors appear once the device has its first record."""
     state = mock_gridyard_client.state.return_value
-    mock_gridyard_client.state.return_value = replace(state, record=None)
+    mock_gridyard_client.state.return_value = State.from_json(
+        load_json_object_fixture("state-without-record.json")
+    )
     await setup_integration(hass, mock_config_entry)
 
     assert not er.async_entries_for_config_entry(
