@@ -18,7 +18,7 @@ from gridyard import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryError
+from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -116,8 +116,7 @@ def _map_errors() -> Iterator[None]:
     try:
         yield
     except InvalidAuth as err:
-        # Reauthentication follows with discovery; until then the entry stops.
         msg = "The device rejected the setup code"
-        raise ConfigEntryError(msg) from err
+        raise ConfigEntryAuthFailed(msg) from err
     except GridyardError as err:
         raise UpdateFailed(str(err)) from err

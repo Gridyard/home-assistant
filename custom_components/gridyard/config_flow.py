@@ -3,13 +3,14 @@
 import asyncio
 import logging
 import re
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping
 from contextlib import asynccontextmanager
 from typing import Any
 
 import aiohttp
 import probatio
 from gridyard import (
+    API,
     ApiUnsupported,
     CannotConnect,
     Catalog,
@@ -28,6 +29,7 @@ from homeassistant.core import callback
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.helpers.selector import BooleanSelector
+from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 
 from .const import (
     CONF_METER_KEY,
@@ -111,39 +113,108 @@ class GridyardConfigFlow(ConfigFlow, domain=DOMAIN):
             return await self.async_step_setup_code()
         return self.async_show_form(step_id="user", data_schema=STEP_USER_DATA_SCHEMA)
 
+    async def async_step_zeroconf(
+        self, discovery_info: ZeroconfServiceInfo
+    ) -> ConfigFlowResult:
+        """Handle a device found by mDNS; a known device gets its new address."""
+        properties = discovery_info.properties
+        if properties.get("api") != str(API):
+            return self.async_abort(reason="api_unsupported")
+        device_id = properties.get("id")
+        if not device_id:
+            return self.async_abort(reason="invalid_discovery_info")
+        await self.async_set_unique_id(device_id)
+        # The address, not the mDNS name, so the entry does not depend on mDNS.
+        self._abort_if_unique_id_configured(updates={CONF_HOST: discovery_info.host})
+        self._host = discovery_info.host
+        self.context["title_placeholders"] = {"name": device_title(device_id)}
+        return await self.async_step_discovery_confirm()
+
+    async def async_step_discovery_confirm(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Ask whether to set up the found device."""
+        if user_input is not None:
+            return await self.async_step_setup_code()
+        return self.async_show_form(
+            step_id="discovery_confirm",
+            description_placeholders={"name": device_title(str(self.unique_id))},
+        )
+
     async def async_step_setup_code(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Ask for the setup code and check it with a session."""
         errors: dict[str, str] = {}
         if user_input is not None:
-            self._setup_code = normalize_setup_code(user_input[CONF_SETUP_CODE])
-            if SETUP_CODE_PATTERN.fullmatch(self._setup_code) is None:
-                # A wrong code would also lock the device for up to 300 s.
-                errors[CONF_SETUP_CODE] = "invalid_setup_code"
-            else:
-                try:
-                    info = await self._async_read_device()
-                except CannotConnect:
-                    errors["base"] = "cannot_connect"
-                except InvalidAuth:
-                    errors["base"] = "invalid_auth"
-                except ApiUnsupported:
-                    errors["base"] = "api_unsupported"
-                except Exception:
-                    _LOGGER.exception("Unexpected exception")
-                    errors["base"] = "unknown"
-                else:
-                    await self.async_set_unique_id(info.device_id)
-                    self._abort_if_unique_id_configured()
-                    if info.profile_id is not None:
-                        return self._async_create_entry()
-                    return await self.async_step_profile()
+            info, errors = await self._async_check_setup_code(
+                user_input[CONF_SETUP_CODE], read_catalog=True
+            )
+            if info is not None:
+                await self.async_set_unique_id(info.device_id)
+                self._abort_if_unique_id_configured()
+                if info.profile_id is not None:
+                    return self._async_create_entry()
+                return await self.async_step_profile()
         return self.async_show_form(
             step_id="setup_code",
             data_schema=STEP_SETUP_CODE_DATA_SCHEMA,
             errors=errors,
         )
+
+    async def async_step_reauth(
+        self, entry_data: Mapping[str, Any]
+    ) -> ConfigFlowResult:
+        """Start reauthentication after the device rejected the setup code."""
+        self._host = entry_data[CONF_HOST]
+        return await self.async_step_reauth_confirm()
+
+    async def async_step_reauth_confirm(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Ask for the setup code again and check it with a session."""
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            info, errors = await self._async_check_setup_code(
+                user_input[CONF_SETUP_CODE], read_catalog=False
+            )
+            if info is not None:
+                await self.async_set_unique_id(info.device_id)
+                self._abort_if_unique_id_mismatch(reason="wrong_device")
+                return self.async_update_reload_and_abort(
+                    self._get_reauth_entry(),
+                    data_updates={CONF_SETUP_CODE: self._setup_code},
+                )
+        return self.async_show_form(
+            step_id="reauth_confirm",
+            data_schema=STEP_SETUP_CODE_DATA_SCHEMA,
+            errors=errors,
+            description_placeholders={"name": self._get_reauth_entry().title},
+        )
+
+    async def _async_check_setup_code(
+        self, typed_code: str, *, read_catalog: bool
+    ) -> tuple[DeviceInfo | None, dict[str, str]]:
+        """Normalize the code and open a session; return device-info or form errors.
+
+        Setup also reads the catalog when the device has no profile yet; reauth
+        only checks the code.
+        """
+        self._setup_code = normalize_setup_code(typed_code)
+        if SETUP_CODE_PATTERN.fullmatch(self._setup_code) is None:
+            # A wrong code would also lock the device for up to 300 s.
+            return None, {CONF_SETUP_CODE: "invalid_setup_code"}
+        try:
+            return await self._async_read_device(read_catalog=read_catalog), {}
+        except CannotConnect:
+            return None, {"base": "cannot_connect"}
+        except InvalidAuth:
+            return None, {"base": "invalid_auth"}
+        except ApiUnsupported:
+            return None, {"base": "api_unsupported"}
+        except Exception:
+            _LOGGER.exception("Unexpected exception")
+            return None, {"base": "unknown"}
 
     async def async_step_profile(
         self, user_input: dict[str, Any] | None = None
@@ -227,11 +298,11 @@ class GridyardConfigFlow(ConfigFlow, domain=DOMAIN):
         error, self._send_error = self._send_error, None
         return {} if error is None else {"base": error}
 
-    async def _async_read_device(self) -> DeviceInfo:
-        """Read device-info, and the catalog if the device has no profile yet."""
+    async def _async_read_device(self, *, read_catalog: bool) -> DeviceInfo:
+        """Read device-info, and the catalog if asked and the device has no profile."""
         async with self._client() as client:
             info = await client.device_info()
-            if info.profile_id is None:
+            if read_catalog and info.profile_id is None:
                 self._catalog = await client.profiles()
         return info
 

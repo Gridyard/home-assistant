@@ -1,5 +1,6 @@
 {
   "config": {
+    "flow_title": "{name}",
     "step": {
       "user": {
         "description": "Enter the address of your gridyard device in your home network.",
@@ -36,6 +37,18 @@
         "data_description": {
           "meter_key": "32 hexadecimal characters. Spaces do not matter."
         }
+      },
+      "discovery_confirm": {
+        "description": "Set up {name}? You need the setup code from its label."
+      },
+      "reauth_confirm": {
+        "description": "{name} rejected the stored setup code. Enter the code from its label.",
+        "data": {
+          "setup_code": "Setup code"
+        },
+        "data_description": {
+          "setup_code": "12 characters. Case, spaces and hyphens do not matter."
+        }
       }
     },
     "error": {
@@ -50,7 +63,11 @@
       "not_applied": "The device did not report the new profile within a minute"
     },
     "abort": {
-      "already_configured": "Device is already configured"
+      "already_configured": "Device is already configured",
+      "api_unsupported": "The firmware of the device does not support Home Assistant yet. Update the device first.",
+      "reauth_successful": "The setup code was updated",
+      "wrong_device": "This setup code belongs to another device",
+      "invalid_discovery_info": "The device announced itself without an ID"
     },
     "progress": {
       "send_settings": "The device restarts with the new settings. This takes up to a minute."

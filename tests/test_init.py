@@ -34,7 +34,7 @@ async def test_load_unload_entry(
     ("side_effect", "state"),
     [
         (CannotConnect("refused"), ConfigEntryState.SETUP_RETRY),
-        (InvalidAuth("rejected"), ConfigEntryState.SETUP_ERROR),
+        (InvalidAuth("rejected"), ConfigEntryState.SETUP_ERROR),  # reauth starts
     ],
 )
 async def test_setup_errors(
