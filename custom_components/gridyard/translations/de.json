@@ -1,5 +1,6 @@
 {
   "config": {
+    "flow_title": "{name}",
     "step": {
       "user": {
         "description": "Gib die Adresse deines gridyard-Geräts im Heimnetz ein.",
@@ -36,6 +37,18 @@
         "data_description": {
           "meter_key": "32 Hexadezimalzeichen. Leerzeichen spielen keine Rolle."
         }
+      },
+      "discovery_confirm": {
+        "description": "{name} einrichten? Du brauchst den Setup-Code vom Etikett."
+      },
+      "reauth_confirm": {
+        "description": "{name} hat den gespeicherten Setup-Code abgelehnt. Gib den Code vom Etikett ein.",
+        "data": {
+          "setup_code": "Setup-Code"
+        },
+        "data_description": {
+          "setup_code": "12 Zeichen. Groß- und Kleinschreibung, Leerzeichen und Bindestriche spielen keine Rolle."
+        }
       }
     },
     "error": {
@@ -50,7 +63,10 @@
       "not_applied": "Das Gerät hat das neue Profil nicht innerhalb einer Minute gemeldet"
     },
     "abort": {
-      "already_configured": "Das Gerät ist bereits eingerichtet"
+      "already_configured": "Das Gerät ist bereits eingerichtet",
+      "api_unsupported": "Die Firmware des Geräts unterstützt Home Assistant noch nicht. Aktualisiere zuerst das Gerät.",
+      "reauth_successful": "Der Setup-Code wurde aktualisiert",
+      "wrong_device": "Dieser Setup-Code gehört zu einem anderen Gerät"
     },
     "progress": {
       "send_settings": "Das Gerät startet mit den neuen Einstellungen neu. Das dauert bis zu einer Minute."
