@@ -1,13 +1,14 @@
 """Test the gridyard sensors."""
 
+from collections.abc import Generator
 from dataclasses import replace
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from freezegun.api import FrozenDateTimeFactory
 from gridyard import CannotConnect, Quality, State
 from homeassistant.config_entries import ConfigEntryState
-from homeassistant.const import STATE_UNAVAILABLE
+from homeassistant.const import STATE_UNAVAILABLE, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
@@ -26,6 +27,13 @@ from .conftest import DEVICE_ID
 
 ENERGY_IMPORT = "sensor.sm_6789ab_energy_import"
 POWER_L1 = "sensor.sm_6789ab_power_l1"
+
+
+@pytest.fixture(autouse=True)
+def only_sensors() -> Generator[None]:
+    """Load only the sensor platform."""
+    with patch("custom_components.gridyard.PLATFORMS", [Platform.SENSOR]):
+        yield
 
 
 async def next_update(hass: HomeAssistant, freezer: FrozenDateTimeFactory) -> None:
