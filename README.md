@@ -14,6 +14,15 @@ Home Assistant stores the host and the setup code in plain text in its configura
 (`.storage/core.config_entries`), like the credentials of other integrations. Anyone who can read that directory can
 connect to the device in your home network.
 
+## Firmware updates
+
+The integration reads `manifest.json` of the latest release in
+[Gridyard/firmware](https://github.com/Gridyard/firmware) every 6 hours and offers new firmware as an update. It
+downloads the image, checks its size and SHA-256, sends it to the device and waits until the device confirms the
+new version after a trial boot. If the trial boot fails, the device runs the previous version again and Home
+Assistant says so. GitHub sees the address of your Home Assistant server. Switch the check off in the options of
+the integration; then no request goes to GitHub.
+
 ## Development
 
 Requires Python 3.14.
@@ -25,6 +34,9 @@ python3.14 -m venv .venv
 .venv/bin/ruff format --check
 .venv/bin/pytest
 ```
+
+To test firmware updates against a release server of your own, set `GRIDYARD_MANIFEST_URL` to its `manifest.json`
+in the environment of Home Assistant.
 
 ## License
 
