@@ -9,10 +9,26 @@
         "data_description": {
           "host": "The IP address or host name of the device."
         }
+      },
+      "setup_code": {
+        "description": "Enter the setup code from the label of the device.",
+        "data": {
+          "setup_code": "Setup code"
+        },
+        "data_description": {
+          "setup_code": "12 characters. Case, spaces and hyphens do not matter."
+        }
       }
     },
     "error": {
-      "cannot_connect": "Failed to connect"
+      "api_unsupported": "The firmware of the device does not support Home Assistant yet. Update the device first.",
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "The device rejected the setup code",
+      "invalid_setup_code": "A setup code has 12 characters: digits and letters except I, L, O and U",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "Device is already configured"
     }
   }
 }
