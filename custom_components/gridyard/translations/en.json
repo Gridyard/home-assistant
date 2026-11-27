@@ -83,6 +83,7 @@
           "update_check": "Check for firmware updates"
         },
         "data_description": {
+          "profile": "The meter model the device reads. A new profile replaces the meter sensors.",
           "meter_key": "Leave empty to keep the key on the device.",
           "update_check": "Home Assistant offers new firmware for the device."
         }

@@ -259,6 +259,7 @@ async def test_meter_key_format(hass: HomeAssistant) -> None:
         (ProfileUnknown("profile: PROFILE_UNKNOWN"), "profile_unknown"),
         (GridyardError("device-info: expected state not reached"), "not_applied"),
         (CannotConnect("refused"), "cannot_connect"),
+        (RuntimeError("boom"), "unknown"),
     ],
 )
 async def test_profile_send_errors(

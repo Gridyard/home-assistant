@@ -83,6 +83,7 @@
           "update_check": "Nach Firmware-Updates suchen"
         },
         "data_description": {
+          "profile": "Das Zählermodell, das das Gerät ausliest. Ein neues Profil ersetzt die Zählersensoren.",
           "meter_key": "Leer lassen, um den Schlüssel auf dem Gerät zu behalten.",
           "update_check": "Home Assistant bietet neue Firmware für das Gerät an."
         }

@@ -179,24 +179,38 @@ async def test_invalid_input(
     mock_gridyard_client.set_profile.assert_not_called()
 
 
+@pytest.mark.parametrize(
+    ("side_effect", "error"),
+    [
+        (ProfileUnknown("PROFILE_UNKNOWN"), "profile_unknown"),
+        (RuntimeError("boom"), "unknown"),
+    ],
+)
 async def test_send_error(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
     mock_gridyard_client: AsyncMock,
+    side_effect: Exception,
+    error: str,
 ) -> None:
-    """Test a failed profile change shows the form again with the error."""
+    """Test a failed profile change shows the form again and recovers."""
     await setup_integration(hass, mock_config_entry)
-    mock_gridyard_client.set_profile.side_effect = ProfileUnknown("PROFILE_UNKNOWN")
+    mock_gridyard_client.set_profile.side_effect = side_effect
     flow_id = await start_options(hass, mock_config_entry)
+    user_input = {CONF_PROFILE: "iec-apator-12ec3", CONF_UPDATE_CHECK: True}
 
-    await hass.config_entries.options.async_configure(
-        flow_id, {CONF_PROFILE: "iec-apator-12ec3", CONF_UPDATE_CHECK: True}
-    )
+    await hass.config_entries.options.async_configure(flow_id, user_input)
     result = await finish_progress(hass, flow_id)
 
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "init"
-    assert result["errors"] == {"base": "profile_unknown"}
+    assert result["errors"] == {"base": error}
+
+    mock_gridyard_client.set_profile.side_effect = None
+    await hass.config_entries.options.async_configure(flow_id, user_input)
+    result = await finish_progress(hass, flow_id)
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
 
 
 async def test_catalog_unreachable(
