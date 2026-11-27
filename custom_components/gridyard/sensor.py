@@ -166,9 +166,14 @@ class GridyardDiagnosticDescription(SensorEntityDescription):
     value_fn: Callable[[GridyardCoordinator], StateType]
 
 
+def _known(value: str | None, options: list[str]) -> str | None:
+    """Return value if the enum knows it; the contract may add states later."""
+    return value if value in options else None
+
+
 def _meter_state(coordinator: GridyardCoordinator) -> str | None:
     axis = coordinator.data.axes.get("meter")
-    return None if axis is None else axis.state
+    return None if axis is None else _known(axis.state, METER_STATES)
 
 
 def _quality(coordinator: GridyardCoordinator) -> str | None:
@@ -202,7 +207,7 @@ DIAGNOSTIC_SENSORS: tuple[GridyardDiagnosticDescription, ...] = (
         translation_key="mode",
         device_class=SensorDeviceClass.ENUM,
         options=MODES,
-        value_fn=lambda coordinator: coordinator.data.mode,
+        value_fn=lambda coordinator: _known(coordinator.data.mode, MODES),
     ),
     GridyardDiagnosticDescription(
         key="profile",

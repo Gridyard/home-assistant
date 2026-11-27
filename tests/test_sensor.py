@@ -199,3 +199,19 @@ async def test_diagnostic_sensors(
         entity_registry.async_get(RSSI).disabled_by
         is er.RegistryEntryDisabler.INTEGRATION
     )
+
+
+async def test_diagnostic_sensors_unknown_states(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_gridyard_client: AsyncMock,
+) -> None:
+    """Test states the contract may add later show as unknown, not as an error."""
+    state = mock_gridyard_client.state.return_value
+    axes = {**state.axes, "meter": replace(state.axes["meter"], state="new_state")}
+    mock_gridyard_client.state.return_value = replace(state, axes=axes, mode="new_mode")
+
+    await setup_integration(hass, mock_config_entry)
+
+    assert hass.states.get(METER_STATE).state == STATE_UNKNOWN
+    assert hass.states.get("sensor.sm_6789ab_mode").state == STATE_UNKNOWN
