@@ -4,23 +4,43 @@ from collections.abc import Generator
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from gridyard import DeviceInfo, State
+from gridyard import Catalog, DeviceInfo, Profile, State
 from homeassistant.const import CONF_HOST
 from pytest_homeassistant_custom_component.common import (
     MockConfigEntry,
     load_json_object_fixture,
 )
+from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
+from syrupy.assertion import SnapshotAssertion
 
 from custom_components.gridyard.const import CONF_SETUP_CODE, DOMAIN
 
 DEVICE_ID = "sm-0123456789ab"
 HOST = "192.0.2.10"
 SETUP_CODE = "AAAABBBBCCCC"
+# Synthetic catalog with the profile of the state example.
+CATALOG = Catalog(
+    catalog="caf9acc67c01abf6",
+    profiles=(
+        Profile(id="iec-apator-12ec3", model="Apator 12EC3", rev=1, encrypted=False),
+        Profile(id="sml-ebz-dd3", model="eBZ DD3", rev=1, encrypted=False),
+    ),
+)
 
 
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
     """Load integrations from custom_components in every test."""
+
+
+@pytest.fixture
+def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
+    """Use the Home Assistant snapshot extension.
+
+    pytest-homeassistant-custom-component sets it in a plugin fixture, which the
+    syrupy plugin overrides when pytest loads syrupy later.
+    """
+    return snapshot.use_extension(HomeAssistantSnapshotExtension)
 
 
 @pytest.fixture
@@ -50,4 +70,5 @@ def mock_gridyard_client() -> Generator[AsyncMock]:
         client.state.return_value = State.from_json(
             load_json_object_fixture("state.json")
         )
+        client.profiles.return_value = CATALOG
         yield client
