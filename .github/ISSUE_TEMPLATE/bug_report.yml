@@ -1,0 +1,63 @@
+name: Bug report
+description: Something in the integration does not work as described.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        This repository is public. Do not post setup codes, meter keys, Wi-Fi passwords, IP addresses or readings
+        of your meter. The diagnostics download leaves these out.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened
+      description: What you did, what you expected and what happened instead.
+    validations:
+      required: true
+  - type: input
+    id: ha-version
+    attributes:
+      label: Home Assistant version
+      placeholder: "2026.10.4"
+    validations:
+      required: true
+  - type: input
+    id: integration-version
+    attributes:
+      label: Integration version
+      description: Shown in HACS.
+    validations:
+      required: true
+  - type: input
+    id: firmware-version
+    attributes:
+      label: Firmware version of the device
+      description: Shown on the device page in Home Assistant.
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode of the device
+      options:
+        - Local
+        - Cloud and local
+        - Cloud
+        - I don't know
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: >-
+        Attach the diagnostics download: Settings → Devices & services → gridyard → ⋮ → Download diagnostics.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Log lines of `custom_components.gridyard` and `gridyard`, if any.
+      render: text
+  - type: checkboxes
+    id: secrets
+    attributes:
+      label: Privacy
+      options:
+        - label: I removed setup codes, meter keys, Wi-Fi passwords, IP addresses and readings from this issue.
+          required: true
