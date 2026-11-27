@@ -344,6 +344,41 @@
       },
       "operating_time_tariff_phase": {
         "name": "Betriebsdauer Tarif {tariff} {phase}"
+      },
+      "meter_state": {
+        "name": "Zähler",
+        "state": {
+          "not_selected": "Kein Profil",
+          "no_signal": "Kein Signal",
+          "invalid": "Ungültige Daten",
+          "partial": "Unvollständige Daten",
+          "valid": "OK",
+          "stale": "Veraltet"
+        }
+      },
+      "quality": {
+        "name": "Datenqualität",
+        "state": {
+          "valid": "Gültig",
+          "partial": "Unvollständig",
+          "stale": "Veraltet",
+          "unavailable": "Keine Daten",
+          "invalid": "Ungültig"
+        }
+      },
+      "mode": {
+        "name": "Modus",
+        "state": {
+          "local": "Lokal",
+          "cloud": "Cloud",
+          "cloud_local": "Cloud und lokal"
+        }
+      },
+      "profile": {
+        "name": "Zählerprofil"
+      },
+      "rssi": {
+        "name": "WLAN-Signal"
       }
     },
     "update": {

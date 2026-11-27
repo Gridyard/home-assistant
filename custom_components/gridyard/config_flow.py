@@ -426,5 +426,6 @@ class GridyardOptionsFlow(OptionsFlowWithReload):
         for entry in er.async_entries_for_config_entry(
             registry, self.config_entry.entry_id
         ):
-            if entry.domain == Platform.SENSOR:
+            # Value sensors have no entity category; diagnostic sensors stay.
+            if entry.domain == Platform.SENSOR and entry.entity_category is None:
                 registry.async_remove(entry.entity_id)

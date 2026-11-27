@@ -344,6 +344,41 @@
       },
       "operating_time_tariff_phase": {
         "name": "Operating time tariff {tariff} {phase}"
+      },
+      "meter_state": {
+        "name": "Meter",
+        "state": {
+          "not_selected": "No profile",
+          "no_signal": "No signal",
+          "invalid": "Invalid data",
+          "partial": "Partial data",
+          "valid": "OK",
+          "stale": "Outdated"
+        }
+      },
+      "quality": {
+        "name": "Data quality",
+        "state": {
+          "valid": "Valid",
+          "partial": "Partial",
+          "stale": "Outdated",
+          "unavailable": "No data",
+          "invalid": "Invalid"
+        }
+      },
+      "mode": {
+        "name": "Mode",
+        "state": {
+          "local": "Local",
+          "cloud": "Cloud",
+          "cloud_local": "Cloud and local"
+        }
+      },
+      "profile": {
+        "name": "Meter profile"
+      },
+      "rssi": {
+        "name": "Wi-Fi signal"
       }
     },
     "update": {
