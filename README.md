@@ -81,10 +81,12 @@ evcc ([documentation](https://docs.evcc.io/en/smarthome/home-assistant), evcc 0.
 
 *Power* is positive for import from the grid and negative for export, as evcc expects of a grid meter. If your meter
 reports only *Power import* and *Power export*, create a template sensor helper in Home Assistant with the unit W and
-the following state, and assign it as *Power Entity*:
+the following state, and assign it as *Power Entity*. While a sensor is unavailable, the helper stays unknown
+instead of reporting a wrong value:
 
 ```jinja
-{{ states('sensor.sm_xxxxxx_power_import') | float - states('sensor.sm_xxxxxx_power_export') | float }}
+{{ (states('sensor.sm_xxxxxx_power_import') | float - states('sensor.sm_xxxxxx_power_export') | float)
+   if has_value('sensor.sm_xxxxxx_power_import') and has_value('sensor.sm_xxxxxx_power_export') else none }}
 ```
 
 ### Options
