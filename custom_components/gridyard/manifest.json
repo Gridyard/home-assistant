@@ -1,0 +1,13 @@
+{
+  "domain": "gridyard",
+  "name": "gridyard",
+  "categories": ["energy.meters_monitoring"],
+  "codeowners": ["@lukaslorenzz"],
+  "config_flow": true,
+  "documentation": "https://github.com/Gridyard/home-assistant",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/Gridyard/home-assistant/issues",
+  "requirements": [],
+  "version": "0.0.1"
+}
