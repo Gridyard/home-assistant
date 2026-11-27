@@ -1,7 +1,7 @@
 # gridyard for Home Assistant
 
-Home Assistant integration for the gridyard reader, a reading head for your meter. Home Assistant reads the device
-in your home network, without a gridyard account and without the gridyard cloud.
+Home Assistant integration for the [gridyard](https://gridyard.de) reader, a reading head for your meter. Home
+Assistant reads the device in your home network, without a gridyard account and without the gridyard cloud.
 
 **Status:** in development, not ready for use. The integration needs device firmware with the local API, which is
 not released yet. The gridyard app and the firmware will add the setup paths below in later releases.
