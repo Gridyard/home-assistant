@@ -343,13 +343,13 @@
       "message": "The firmware could not be downloaded or does not match its release; nothing was sent to the device: {error}"
     },
     "update_fell_back": {
-      "message": "The device did not start the new firmware and runs the previous version again: {error}"
+      "message": "The device did not start the new firmware and runs {firmware} again"
     },
     "update_rejected": {
       "message": "The device rejected the firmware: {error}"
     },
     "update_failed": {
-      "message": "The firmware update did not complete; the device keeps the version it confirmed: {error}"
+      "message": "The firmware update did not complete; try again later. The device keeps the firmware it runs: {error}"
     }
   }
 }

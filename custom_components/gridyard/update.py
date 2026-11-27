@@ -8,6 +8,7 @@ from gridyard import (
     FirmwareRelease,
     GridyardError,
     UpdateFailed,
+    UpdateFellBack,
     fetch_image,
 )
 from homeassistant.components.update import (
@@ -107,16 +108,22 @@ class GridyardUpdate(GridyardEntity, UpdateEntity):
                 translation_key="download_failed",
                 translation_placeholders={"error": str(err)},
             ) from err
-        self._set_progress(0)
+        self._set_progress(in_progress=True, percentage=0)
         self.coordinator.updating = True
         try:
             await self.coordinator.client.update(
                 release.version, image, self._on_progress
             )
-        except UpdateFailed as err:
+        except UpdateFellBack as err:
             raise HomeAssistantError(
                 translation_domain=DOMAIN,
                 translation_key="update_fell_back",
+                translation_placeholders={"firmware": err.firmware},
+            ) from err
+        except UpdateFailed as err:
+            raise HomeAssistantError(
+                translation_domain=DOMAIN,
+                translation_key="update_failed",
                 translation_placeholders={"error": str(err)},
             ) from err
         except DeviceError as err:
@@ -133,19 +140,22 @@ class GridyardUpdate(GridyardEntity, UpdateEntity):
             ) from err
         finally:
             self.coordinator.updating = False
-            self._set_progress(None)
+            self._set_progress(in_progress=False, percentage=None)
             await self.coordinator.async_refresh()
 
     @callback
     def _on_progress(self, sent: int, total: int) -> None:
-        """Show the upload progress in whole percent."""
-        percentage = sent * 100 // total
+        """Show the upload in whole percent; after it, restart and trial boot follow.
+
+        Their duration is unknown, so the progress shows without a percentage then.
+        """
+        percentage = None if sent >= total else sent * 100 // total
         if percentage != self._attr_update_percentage:
-            self._set_progress(percentage)
+            self._set_progress(in_progress=True, percentage=percentage)
 
     @callback
-    def _set_progress(self, percentage: int | None) -> None:
-        """Show an install in progress (with percentage) or none (None)."""
-        self._attr_in_progress = percentage is not None
+    def _set_progress(self, *, in_progress: bool, percentage: int | None) -> None:
+        """Show whether an install runs, with a percentage or without."""
+        self._attr_in_progress = in_progress
         self._attr_update_percentage = percentage
         self.async_write_ha_state()

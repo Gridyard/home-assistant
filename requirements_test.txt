@@ -1,4 +1,4 @@
 pytest-homeassistant-custom-component==0.13.375
 ruff==0.16.9
 # gridyard 0.2.0 is not on PyPI yet; this commit of stage/ha-07-lib is that version.
-gridyard @ git+https://github.com/Gridyard/python-gridyard@33a3394bd2d583c912d31e2e46e4eb773f663e0c
+gridyard @ git+https://github.com/Gridyard/python-gridyard@1668c63ab8595355f318c4cdaf10c3befa18732f

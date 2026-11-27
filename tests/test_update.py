@@ -10,6 +10,7 @@ from gridyard import (
     CannotConnect,
     GridyardError,
     UpdateFailed,
+    UpdateFellBack,
     UpdateRejected,
 )
 from homeassistant.components.update import (
@@ -144,7 +145,8 @@ async def test_install(
     await install(hass)
 
     mock_gridyard_client.update.assert_awaited_once_with("v0.6.0", IMAGE, ANY)
-    assert progress_states == [(True, 0), (True, 50), (True, 100)]
+    # After the last block the device restarts; that shows without a percentage.
+    assert progress_states == [(True, 0), (True, 50), (True, None)]
     state = hass.states.get(FIRMWARE)
     assert state.state == STATE_OFF
     assert state.attributes[ATTR_IN_PROGRESS] is False
@@ -159,7 +161,8 @@ async def test_install(
 @pytest.mark.parametrize(
     ("error", "translation_key"),
     [
-        (UpdateFailed("update: device fell back to v0.5.0"), "update_fell_back"),
+        (UpdateFellBack("update: device fell back", "v0.5.0"), "update_fell_back"),
+        (UpdateFailed("update-begin: UPDATE_FAILED"), "update_failed"),
         (UpdateRejected("update-begin: UPDATE_REJECTED"), "update_rejected"),
         (CannotConnect("update: ServerDisconnectedError"), "update_failed"),
     ],

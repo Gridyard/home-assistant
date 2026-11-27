@@ -343,13 +343,13 @@
       "message": "Die Firmware ließ sich nicht laden oder passt nicht zu ihrem Release; ans Gerät ging nichts: {error}"
     },
     "update_fell_back": {
-      "message": "Das Gerät hat die neue Firmware nicht gestartet und läuft wieder mit der vorigen Version: {error}"
+      "message": "Das Gerät hat die neue Firmware nicht gestartet und läuft wieder mit {firmware}"
     },
     "update_rejected": {
       "message": "Das Gerät hat die Firmware abgelehnt: {error}"
     },
     "update_failed": {
-      "message": "Das Firmware-Update wurde nicht abgeschlossen; das Gerät behält die bestätigte Version: {error}"
+      "message": "Das Firmware-Update wurde nicht abgeschlossen; versuch es später noch einmal. Das Gerät behält seine laufende Firmware: {error}"
     }
   }
 }
