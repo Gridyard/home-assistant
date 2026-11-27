@@ -94,6 +94,10 @@ async def test_change_profile(
     mock_gridyard_client.set_meter_key.assert_not_called()
     assert mock_config_entry.state is ConfigEntryState.LOADED
     assert entity_registry.async_get(CURRENT_L1) is None
+    # Diagnostic sensors are not removed with the values of the old profile.
+    removed = {unique_id for _, _, unique_id in entity_registry.deleted_entities}
+    assert "sm-0123456789ab_meter_state" not in removed
+    assert "sm-0123456789ab_current_0_1" in removed
     # Home Assistant restores the settings of a sensor that comes back.
     assert entity_registry.async_get(ENERGY_IMPORT).name == "Renamed"
 

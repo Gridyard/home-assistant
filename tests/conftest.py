@@ -2,7 +2,7 @@
 
 from collections.abc import Generator
 from dataclasses import replace
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, PropertyMock, patch
 
 import pytest
 from gridyard import Catalog, DeviceInfo, FirmwareRelease, Profile, State
@@ -115,3 +115,14 @@ def mock_fetch_image() -> Generator[AsyncMock]:
         "custom_components.gridyard.update.fetch_image", return_value=IMAGE
     ) as fetch_image:
         yield fetch_image
+
+
+@pytest.fixture
+def entity_registry_enabled_by_default() -> Generator[None]:
+    """Enable entities that are disabled by default, as Home Assistant Core tests do."""
+    with patch(
+        "homeassistant.helpers.entity.Entity.entity_registry_enabled_default",
+        return_value=True,
+        new_callable=PropertyMock,
+    ):
+        yield

@@ -8,7 +8,7 @@ import pytest
 from freezegun.api import FrozenDateTimeFactory
 from gridyard import CannotConnect, Quality, State
 from homeassistant.config_entries import ConfigEntryState
-from homeassistant.const import STATE_UNAVAILABLE, Platform
+from homeassistant.const import STATE_UNAVAILABLE, STATE_UNKNOWN, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
@@ -27,6 +27,21 @@ from .conftest import DEVICE_ID
 
 ENERGY_IMPORT = "sensor.sm_6789ab_energy_import"
 POWER_L1 = "sensor.sm_6789ab_power_l1"
+METER_STATE = "sensor.sm_6789ab_meter"
+QUALITY = "sensor.sm_6789ab_data_quality"
+PROFILE = "sensor.sm_6789ab_meter_profile"
+RSSI = "sensor.sm_6789ab_wi_fi_signal"
+
+
+def value_sensors(
+    entity_registry: er.EntityRegistry, entry: MockConfigEntry
+) -> list[er.RegistryEntry]:
+    """Return the sensors of meter values: no entity category."""
+    return [
+        entity
+        for entity in er.async_entries_for_config_entry(entity_registry, entry.entry_id)
+        if entity.entity_category is None
+    ]
 
 
 @pytest.fixture(autouse=True)
@@ -48,14 +63,14 @@ def with_quality(state: State, quality: Quality) -> State:
     return replace(state, record=replace(state.record, quality=quality))
 
 
-@pytest.mark.usefixtures("mock_gridyard_client")
+@pytest.mark.usefixtures("mock_gridyard_client", "entity_registry_enabled_by_default")
 async def test_sensors(
     hass: HomeAssistant,
     snapshot: SnapshotAssertion,
     entity_registry: er.EntityRegistry,
     mock_config_entry: MockConfigEntry,
 ) -> None:
-    """Test one sensor per quantity, tariff and phase of the state example."""
+    """Test the value sensors of the state example and the diagnostic sensors."""
     await setup_integration(hass, mock_config_entry)
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
@@ -89,13 +104,14 @@ async def test_device_without_profile(
     mock_config_entry: MockConfigEntry,
     device_without_profile: AsyncMock,
 ) -> None:
-    """Test a device without profile and live record loads without sensors."""
+    """Test a device without profile and live record loads without value sensors."""
     await setup_integration(hass, mock_config_entry)
 
     assert mock_config_entry.state is ConfigEntryState.LOADED
-    assert not er.async_entries_for_config_entry(
-        entity_registry, mock_config_entry.entry_id
-    )
+    assert not value_sensors(entity_registry, mock_config_entry)
+    assert hass.states.get(METER_STATE).state == "valid"
+    assert hass.states.get(QUALITY).state == STATE_UNKNOWN
+    assert hass.states.get(PROFILE).state == STATE_UNKNOWN
     device_without_profile.profiles.assert_not_called()
 
 
@@ -156,15 +172,46 @@ async def test_sensors_added_later(
     )
     await setup_integration(hass, mock_config_entry)
 
-    assert not er.async_entries_for_config_entry(
-        entity_registry, mock_config_entry.entry_id
-    )
+    assert not value_sensors(entity_registry, mock_config_entry)
 
     mock_gridyard_client.state.return_value = state
     await next_update(hass, freezer)
 
-    entries = er.async_entries_for_config_entry(
-        entity_registry, mock_config_entry.entry_id
-    )
-    assert len(entries) == 11
+    assert len(value_sensors(entity_registry, mock_config_entry)) == 11
     assert hass.states.get(ENERGY_IMPORT).state == "12345.6789"
+
+
+@pytest.mark.usefixtures("mock_gridyard_client")
+async def test_diagnostic_sensors(
+    hass: HomeAssistant,
+    entity_registry: er.EntityRegistry,
+    mock_config_entry: MockConfigEntry,
+) -> None:
+    """Test meter state, quality, mode and profile; the signal is off by default."""
+    await setup_integration(hass, mock_config_entry)
+
+    assert hass.states.get(METER_STATE).state == "valid"
+    assert hass.states.get(QUALITY).state == "valid"
+    assert hass.states.get("sensor.sm_6789ab_mode").state == "local"
+    assert hass.states.get(PROFILE).state == "sml-ebz-dd3"
+    assert hass.states.get(RSSI) is None
+    assert (
+        entity_registry.async_get(RSSI).disabled_by
+        is er.RegistryEntryDisabler.INTEGRATION
+    )
+
+
+async def test_diagnostic_sensors_unknown_states(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_gridyard_client: AsyncMock,
+) -> None:
+    """Test states the contract may add later show as unknown, not as an error."""
+    state = mock_gridyard_client.state.return_value
+    axes = {**state.axes, "meter": replace(state.axes["meter"], state="new_state")}
+    mock_gridyard_client.state.return_value = replace(state, axes=axes, mode="new_mode")
+
+    await setup_integration(hass, mock_config_entry)
+
+    assert hass.states.get(METER_STATE).state == STATE_UNKNOWN
+    assert hass.states.get("sensor.sm_6789ab_mode").state == STATE_UNKNOWN

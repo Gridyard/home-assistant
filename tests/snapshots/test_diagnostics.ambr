@@ -1,0 +1,155 @@
+# serializer version: 1
+# name: test_diagnostics
+  dict({
+    'device': dict({
+      'catalog': 'caf9acc67c01abf6',
+      'device_id': '…6789ab',
+      'firmware': 'v0.5.0',
+      'mode': 'local',
+      'model': 'eBZ DD3',
+      'profile_count': 86,
+      'profile_id': 'sml-ebz-dd3',
+    }),
+    'entry': dict({
+      'data': dict({
+        'host': '**REDACTED**',
+        'setup_code': '**REDACTED**',
+      }),
+      'options': dict({
+      }),
+    }),
+    'firmware_release': dict({
+      'min_api': 1,
+      'notes': 'Synthetic release notes',
+      'sha256': '0000000000000000000000000000000000000000000000000000000000000000',
+      'size': 24,
+      'url': 'https://example.invalid/image.bin',
+      'version': 'v0.6.0',
+    }),
+    'record': dict({
+      'age_ms': 850,
+      'profile_id': 'sml-ebz-dd3',
+      'quality': 'valid',
+      'values': list([
+        dict({
+          'p': 0,
+          'q': 'energy_import',
+          't': 0,
+        }),
+        dict({
+          'p': 0,
+          'q': 'energy_import',
+          't': 1,
+        }),
+        dict({
+          'p': 0,
+          'q': 'energy_import',
+          't': 2,
+        }),
+        dict({
+          'p': 0,
+          'q': 'energy_export',
+          't': 0,
+        }),
+        dict({
+          'p': 0,
+          'q': 'power',
+          't': 0,
+        }),
+        dict({
+          'p': 1,
+          'q': 'power',
+          't': 0,
+        }),
+        dict({
+          'p': 2,
+          'q': 'power',
+          't': 0,
+        }),
+        dict({
+          'p': 3,
+          'q': 'power',
+          't': 0,
+        }),
+        dict({
+          'p': 1,
+          'q': 'voltage',
+          't': 0,
+        }),
+        dict({
+          'p': 2,
+          'q': 'voltage',
+          't': 0,
+        }),
+        dict({
+          'p': 3,
+          'q': 'voltage',
+          't': 0,
+        }),
+      ]),
+    }),
+    'state': dict({
+      'axes': dict({
+        'meter': dict({
+          'error': None,
+          'since_ms': 9200,
+          'state': 'valid',
+        }),
+        'mqtt': dict({
+          'error': None,
+          'since_ms': 0,
+          'state': 'disconnected',
+        }),
+        'provisioning': dict({
+          'error': None,
+          'since_ms': 0,
+          'state': 'closed',
+        }),
+        'registration': dict({
+          'error': None,
+          'since_ms': 0,
+          'state': 'unknown',
+        }),
+        'storage': dict({
+          'error': None,
+          'since_ms': 0,
+          'state': 'ok',
+        }),
+        'update': dict({
+          'error': None,
+          'since_ms': 0,
+          'state': 'idle',
+        }),
+        'wifi': dict({
+          'error': None,
+          'since_ms': 4100,
+          'state': 'connected',
+        }),
+      }),
+      'device_id': '…6789ab',
+      'diag': dict({
+        'cert_expires': None,
+        'heap_free': 186508,
+        'heap_largest': 167936,
+        'heap_min': 184440,
+        'lost': 0,
+        'meter': dict({
+          'bytes': 1234567,
+          'frame_errors': 3,
+          'frames': 86390,
+          'implausible': 0,
+          'line_errors': 0,
+          'no_response': 0,
+          'overflows': 0,
+        }),
+        'rejected': 0,
+        'reset_reason': 'poweron',
+        'rssi': -61,
+        'spool_pending': 0,
+      }),
+      'firmware': 'v0.5.0',
+      'mode': 'local',
+      'uptime_ms': 86400123,
+    }),
+  })
+# ---

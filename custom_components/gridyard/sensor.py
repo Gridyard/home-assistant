@@ -1,5 +1,7 @@
 """Sensors for the values of a gridyard device."""
 
+from collections.abc import Callable
+from dataclasses import dataclass
 from decimal import Decimal
 
 from gridyard import Quality, Value
@@ -11,6 +13,8 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.const import (
     DEGREE,
+    SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+    EntityCategory,
     UnitOfApparentPower,
     UnitOfElectricCurrent,
     UnitOfElectricPotential,
@@ -26,6 +30,7 @@ from homeassistant.const import (
 )
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.helpers.typing import StateType
 
 from .coordinator import GridyardConfigEntry, GridyardCoordinator
 from .entity import GridyardEntity
@@ -154,17 +159,88 @@ SENSORS: dict[str, SensorEntityDescription] = {
 }
 
 
+@dataclass(frozen=True, kw_only=True)
+class GridyardDiagnosticDescription(SensorEntityDescription):
+    """Diagnostic sensor; value_fn reads the coordinator, no extra request."""
+
+    value_fn: Callable[[GridyardCoordinator], StateType]
+
+
+def _known(value: str | None, options: list[str]) -> str | None:
+    """Return value if the enum knows it; the contract may add states later."""
+    return value if value in options else None
+
+
+def _meter_state(coordinator: GridyardCoordinator) -> str | None:
+    axis = coordinator.data.axes.get("meter")
+    return None if axis is None else _known(axis.state, METER_STATES)
+
+
+def _quality(coordinator: GridyardCoordinator) -> str | None:
+    record = coordinator.data.record
+    if record is None or record.quality is Quality.UNKNOWN:
+        return None
+    return record.quality.value
+
+
+METER_STATES = ["not_selected", "no_signal", "invalid", "partial", "valid", "stale"]
+QUALITIES = [quality.value for quality in Quality if quality is not Quality.UNKNOWN]
+MODES = ["local", "cloud", "cloud_local"]
+
+DIAGNOSTIC_SENSORS: tuple[GridyardDiagnosticDescription, ...] = (
+    GridyardDiagnosticDescription(
+        key="meter_state",
+        translation_key="meter_state",
+        device_class=SensorDeviceClass.ENUM,
+        options=METER_STATES,
+        value_fn=_meter_state,
+    ),
+    GridyardDiagnosticDescription(
+        key="quality",
+        translation_key="quality",
+        device_class=SensorDeviceClass.ENUM,
+        options=QUALITIES,
+        value_fn=_quality,
+    ),
+    GridyardDiagnosticDescription(
+        key="mode",
+        translation_key="mode",
+        device_class=SensorDeviceClass.ENUM,
+        options=MODES,
+        value_fn=lambda coordinator: _known(coordinator.data.mode, MODES),
+    ),
+    GridyardDiagnosticDescription(
+        key="profile",
+        translation_key="profile",
+        value_fn=lambda coordinator: coordinator.device.profile_id,
+    ),
+    GridyardDiagnosticDescription(
+        key="rssi",
+        translation_key="rssi",
+        device_class=SensorDeviceClass.SIGNAL_STRENGTH,
+        native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
+        value_fn=lambda coordinator: coordinator.data.diag.get("rssi"),
+    ),
+)
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: GridyardConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Add a sensor for every value of the record, also values that appear later.
+    """Add the diagnostic sensors and a sensor for every value of the record.
 
     Right after setup the device may have no record yet, and a new profile brings
     other values, so every update checks for values without a sensor.
     """
     coordinator = entry.runtime_data
+    async_add_entities(
+        GridyardDiagnosticSensor(coordinator, description)
+        for description in DIAGNOSTIC_SENSORS
+    )
     known: set[tuple[str, int, int]] = set()
 
     @callback
@@ -232,3 +308,26 @@ class GridyardSensor(GridyardEntity, SensorEntity):
         """Return the value."""
         value = self._value
         return None if value is None else value.value
+
+
+class GridyardDiagnosticSensor(GridyardEntity, SensorEntity):
+    """State of the device for diagnosis: meter, quality, mode, profile, signal."""
+
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    entity_description: GridyardDiagnosticDescription
+
+    def __init__(
+        self,
+        coordinator: GridyardCoordinator,
+        description: GridyardDiagnosticDescription,
+    ) -> None:
+        """Initialize the sensor."""
+        super().__init__(coordinator)
+        self.entity_description = description
+        device_id = coordinator.device.device_id
+        self._attr_unique_id = f"{device_id}_{description.key}"
+
+    @property
+    def native_value(self) -> StateType:
+        """Return the value from the latest state."""
+        return self.entity_description.value_fn(self.coordinator)

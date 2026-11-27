@@ -1,4 +1,70 @@
 # serializer version: 1
+# name: test_sensors[sensor.sm_6789ab_data_quality-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'valid',
+        'partial',
+        'stale',
+        'unavailable',
+        'invalid',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.sm_6789ab_data_quality',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Data quality',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': None,
+    'original_name': 'Data quality',
+    'platform': 'gridyard',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'quality',
+    'unique_id': 'sm-0123456789ab_quality',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_sensors[sensor.sm_6789ab_data_quality-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'SM-6789AB Data quality',
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'valid',
+        'partial',
+        'stale',
+        'unavailable',
+        'invalid',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.sm_6789ab_data_quality',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'valid',
+  })
+# ---
 # name: test_sensors[sensor.sm_6789ab_energy_export-entry]
   EntityRegistryEntrySnapshot({
     'aliases': list([
@@ -241,6 +307,186 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '2345.6789',
+  })
+# ---
+# name: test_sensors[sensor.sm_6789ab_meter-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'not_selected',
+        'no_signal',
+        'invalid',
+        'partial',
+        'valid',
+        'stale',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.sm_6789ab_meter',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Meter',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': None,
+    'original_name': 'Meter',
+    'platform': 'gridyard',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'meter_state',
+    'unique_id': 'sm-0123456789ab_meter_state',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_sensors[sensor.sm_6789ab_meter-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'SM-6789AB Meter',
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'not_selected',
+        'no_signal',
+        'invalid',
+        'partial',
+        'valid',
+        'stale',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.sm_6789ab_meter',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'valid',
+  })
+# ---
+# name: test_sensors[sensor.sm_6789ab_meter_profile-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.sm_6789ab_meter_profile',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Meter profile',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': None,
+    'original_name': 'Meter profile',
+    'platform': 'gridyard',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'profile',
+    'unique_id': 'sm-0123456789ab_profile',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_sensors[sensor.sm_6789ab_meter_profile-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'SM-6789AB Meter profile',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.sm_6789ab_meter_profile',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'sml-ebz-dd3',
+  })
+# ---
+# name: test_sensors[sensor.sm_6789ab_mode-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'local',
+        'cloud',
+        'cloud_local',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.sm_6789ab_mode',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Mode',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': None,
+    'original_name': 'Mode',
+    'platform': 'gridyard',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'mode',
+    'unique_id': 'sm-0123456789ab_mode',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_sensors[sensor.sm_6789ab_mode-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'SM-6789AB Mode',
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'local',
+        'cloud',
+        'cloud_local',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.sm_6789ab_mode',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'local',
   })
 # ---
 # name: test_sensors[sensor.sm_6789ab_power-entry]
@@ -647,5 +893,60 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '230.5',
+  })
+# ---
+# name: test_sensors[sensor.sm_6789ab_wi_fi_signal-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.sm_6789ab_wi_fi_signal',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Wi-Fi signal',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.SIGNAL_STRENGTH: 'signal_strength'>,
+    'original_icon': None,
+    'original_name': 'Wi-Fi signal',
+    'platform': 'gridyard',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'rssi',
+    'unique_id': 'sm-0123456789ab_rssi',
+    'unit_of_measurement': 'dBm',
+  })
+# ---
+# name: test_sensors[sensor.sm_6789ab_wi_fi_signal-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'signal_strength',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'SM-6789AB Wi-Fi signal',
+      <SensorEntityCapabilityAttribute.STATE_CLASS: 'state_class'>: <SensorStateClass.MEASUREMENT: 'measurement'>,
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: 'dBm',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.sm_6789ab_wi_fi_signal',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '-61',
   })
 # ---
