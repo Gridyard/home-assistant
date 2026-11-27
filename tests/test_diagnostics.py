@@ -1,6 +1,7 @@
 """Test the diagnostics download."""
 
 import json
+from unittest.mock import AsyncMock
 
 import pytest
 from homeassistant.core import HomeAssistant
@@ -21,14 +22,14 @@ from . import setup_integration
 from .conftest import DEVICE_ID, HOST, SETUP_CODE
 
 
-@pytest.mark.usefixtures("mock_gridyard_client")
 async def test_diagnostics(
     hass: HomeAssistant,
     hass_client: ClientSessionGenerator,
     mock_config_entry: MockConfigEntry,
+    mock_gridyard_client: AsyncMock,
     snapshot: SnapshotAssertion,
 ) -> None:
-    """Test the download holds neither setup code, host nor the full device_id."""
+    """Test the download holds no setup code, host, reading or full device_id."""
     await setup_integration(hass, mock_config_entry)
 
     diagnostics = await get_diagnostics_for_config_entry(
@@ -40,6 +41,9 @@ async def test_diagnostics(
     assert HOST not in text
     assert DEVICE_ID not in text
     assert diagnostics["device"]["device_id"] == "…6789ab"
+    record = mock_gridyard_client.state.return_value.record
+    for value in record.values:
+        assert str(value.value) not in text
     assert diagnostics == snapshot
 
 

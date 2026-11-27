@@ -22,7 +22,7 @@ def _short(device_id: str) -> str:
 async def async_get_config_entry_diagnostics(
     hass: HomeAssistant, entry: GridyardConfigEntry
 ) -> dict[str, Any]:
-    """Return entry, device and latest state without code, key and full device_id."""
+    """Return entry, device and state; no code, key, readings or full device_id."""
     coordinator = entry.runtime_data
     state = coordinator.data
     record = state.record
@@ -46,13 +46,10 @@ async def async_get_config_entry_diagnostics(
             "quality": record.quality.value,
             "age_ms": record.age_ms,
             "profile_id": record.profile_id,
+            # Which values the meter sends, not the readings: downloads end up in
+            # public issues, and readings are personal data.
             "values": [
-                {
-                    "q": value.quantity,
-                    "t": value.tariff,
-                    "p": value.phase,
-                    "value": str(value.value),
-                }
+                {"q": value.quantity, "t": value.tariff, "p": value.phase}
                 for value in record.values
             ],
         },
