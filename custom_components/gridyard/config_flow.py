@@ -23,7 +23,7 @@ from homeassistant.config_entries import (
     ConfigFlowResult,
     OptionsFlowWithReload,
 )
-from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_HOST, Platform
 from homeassistant.core import callback
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
@@ -355,4 +355,5 @@ class GridyardOptionsFlow(OptionsFlowWithReload):
         for entry in er.async_entries_for_config_entry(
             registry, self.config_entry.entry_id
         ):
-            registry.async_remove(entry.entity_id)
+            if entry.domain == Platform.SENSOR:
+                registry.async_remove(entry.entity_id)

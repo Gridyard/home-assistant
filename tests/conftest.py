@@ -5,7 +5,7 @@ from dataclasses import replace
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from gridyard import Catalog, DeviceInfo, Profile, State
+from gridyard import Catalog, DeviceInfo, FirmwareRelease, Profile, State
 from homeassistant.const import CONF_HOST
 from pytest_homeassistant_custom_component.common import (
     MockConfigEntry,
@@ -19,6 +19,16 @@ from custom_components.gridyard.const import CONF_SETUP_CODE, DOMAIN
 DEVICE_ID = "sm-0123456789ab"
 HOST = "192.0.2.10"
 SETUP_CODE = "AAAABBBBCCCC"
+IMAGE = b"synthetic firmware image"
+# Synthetic release; the address never leaves the test.
+RELEASE = FirmwareRelease(
+    version="v0.6.0",
+    url="https://example.invalid/image.bin",
+    sha256="0" * 64,
+    size=len(IMAGE),
+    min_api=1,
+    notes="Synthetic release notes",
+)
 # Synthetic catalog with the profile of the state example.
 CATALOG = Catalog(
     catalog="caf9acc67c01abf6",
@@ -87,3 +97,21 @@ def device_without_profile(mock_gridyard_client: AsyncMock) -> AsyncMock:
         load_json_object_fixture("state-without-record.json")
     )
     return mock_gridyard_client
+
+
+@pytest.fixture(autouse=True)
+def mock_fetch_release() -> Generator[AsyncMock]:
+    """Replace reading manifest.json; no test talks to GitHub."""
+    with patch(
+        "custom_components.gridyard.coordinator.fetch_release", return_value=RELEASE
+    ) as fetch_release:
+        yield fetch_release
+
+
+@pytest.fixture
+def mock_fetch_image() -> Generator[AsyncMock]:
+    """Replace downloading the image of a release."""
+    with patch(
+        "custom_components.gridyard.update.fetch_image", return_value=IMAGE
+    ) as fetch_image:
+        yield fetch_image
