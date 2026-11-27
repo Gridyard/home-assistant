@@ -4,7 +4,7 @@ from collections.abc import Generator
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from gridyard import DeviceInfo, State
+from gridyard import Catalog, DeviceInfo, Profile, State
 from homeassistant.const import CONF_HOST
 from pytest_homeassistant_custom_component.common import (
     MockConfigEntry,
@@ -16,6 +16,14 @@ from custom_components.gridyard.const import CONF_SETUP_CODE, DOMAIN
 DEVICE_ID = "sm-0123456789ab"
 HOST = "192.0.2.10"
 SETUP_CODE = "AAAABBBBCCCC"
+# Synthetic catalog with the profile of the state example.
+CATALOG = Catalog(
+    catalog="caf9acc67c01abf6",
+    profiles=(
+        Profile(id="iec-apator-12ec3", model="Apator 12EC3", rev=1, encrypted=False),
+        Profile(id="sml-ebz-dd3", model="eBZ DD3", rev=1, encrypted=False),
+    ),
+)
 
 
 @pytest.fixture(autouse=True)
@@ -50,4 +58,5 @@ def mock_gridyard_client() -> Generator[AsyncMock]:
         client.state.return_value = State.from_json(
             load_json_object_fixture("state.json")
         )
+        client.profiles.return_value = CATALOG
         yield client

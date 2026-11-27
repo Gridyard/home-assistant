@@ -30,5 +30,249 @@
     "abort": {
       "already_configured": "Device is already configured"
     }
+  },
+  "entity": {
+    "sensor": {
+      "energy_import": {
+        "name": "Energy import"
+      },
+      "energy_import_tariff": {
+        "name": "Energy import tariff {tariff}"
+      },
+      "energy_import_phase": {
+        "name": "Energy import {phase}"
+      },
+      "energy_import_tariff_phase": {
+        "name": "Energy import tariff {tariff} {phase}"
+      },
+      "energy_export": {
+        "name": "Energy export"
+      },
+      "energy_export_tariff": {
+        "name": "Energy export tariff {tariff}"
+      },
+      "energy_export_phase": {
+        "name": "Energy export {phase}"
+      },
+      "energy_export_tariff_phase": {
+        "name": "Energy export tariff {tariff} {phase}"
+      },
+      "power": {
+        "name": "Power"
+      },
+      "power_tariff": {
+        "name": "Power tariff {tariff}"
+      },
+      "power_phase": {
+        "name": "Power {phase}"
+      },
+      "power_tariff_phase": {
+        "name": "Power tariff {tariff} {phase}"
+      },
+      "power_import": {
+        "name": "Power import"
+      },
+      "power_import_tariff": {
+        "name": "Power import tariff {tariff}"
+      },
+      "power_import_phase": {
+        "name": "Power import {phase}"
+      },
+      "power_import_tariff_phase": {
+        "name": "Power import tariff {tariff} {phase}"
+      },
+      "power_export": {
+        "name": "Power export"
+      },
+      "power_export_tariff": {
+        "name": "Power export tariff {tariff}"
+      },
+      "power_export_phase": {
+        "name": "Power export {phase}"
+      },
+      "power_export_tariff_phase": {
+        "name": "Power export tariff {tariff} {phase}"
+      },
+      "reactive_energy_import": {
+        "name": "Reactive energy import"
+      },
+      "reactive_energy_import_tariff": {
+        "name": "Reactive energy import tariff {tariff}"
+      },
+      "reactive_energy_import_phase": {
+        "name": "Reactive energy import {phase}"
+      },
+      "reactive_energy_import_tariff_phase": {
+        "name": "Reactive energy import tariff {tariff} {phase}"
+      },
+      "reactive_energy_export": {
+        "name": "Reactive energy export"
+      },
+      "reactive_energy_export_tariff": {
+        "name": "Reactive energy export tariff {tariff}"
+      },
+      "reactive_energy_export_phase": {
+        "name": "Reactive energy export {phase}"
+      },
+      "reactive_energy_export_tariff_phase": {
+        "name": "Reactive energy export tariff {tariff} {phase}"
+      },
+      "reactive_power": {
+        "name": "Reactive power"
+      },
+      "reactive_power_tariff": {
+        "name": "Reactive power tariff {tariff}"
+      },
+      "reactive_power_phase": {
+        "name": "Reactive power {phase}"
+      },
+      "reactive_power_tariff_phase": {
+        "name": "Reactive power tariff {tariff} {phase}"
+      },
+      "apparent_power": {
+        "name": "Apparent power"
+      },
+      "apparent_power_tariff": {
+        "name": "Apparent power tariff {tariff}"
+      },
+      "apparent_power_phase": {
+        "name": "Apparent power {phase}"
+      },
+      "apparent_power_tariff_phase": {
+        "name": "Apparent power tariff {tariff} {phase}"
+      },
+      "voltage": {
+        "name": "Voltage"
+      },
+      "voltage_tariff": {
+        "name": "Voltage tariff {tariff}"
+      },
+      "voltage_phase": {
+        "name": "Voltage {phase}"
+      },
+      "voltage_tariff_phase": {
+        "name": "Voltage tariff {tariff} {phase}"
+      },
+      "current": {
+        "name": "Current"
+      },
+      "current_tariff": {
+        "name": "Current tariff {tariff}"
+      },
+      "current_phase": {
+        "name": "Current {phase}"
+      },
+      "current_tariff_phase": {
+        "name": "Current tariff {tariff} {phase}"
+      },
+      "frequency": {
+        "name": "Frequency"
+      },
+      "frequency_tariff": {
+        "name": "Frequency tariff {tariff}"
+      },
+      "frequency_phase": {
+        "name": "Frequency {phase}"
+      },
+      "frequency_tariff_phase": {
+        "name": "Frequency tariff {tariff} {phase}"
+      },
+      "power_factor": {
+        "name": "Power factor"
+      },
+      "power_factor_tariff": {
+        "name": "Power factor tariff {tariff}"
+      },
+      "power_factor_phase": {
+        "name": "Power factor {phase}"
+      },
+      "power_factor_tariff_phase": {
+        "name": "Power factor tariff {tariff} {phase}"
+      },
+      "phase_angle": {
+        "name": "Phase angle"
+      },
+      "phase_angle_tariff": {
+        "name": "Phase angle tariff {tariff}"
+      },
+      "phase_angle_phase": {
+        "name": "Phase angle {phase}"
+      },
+      "phase_angle_tariff_phase": {
+        "name": "Phase angle tariff {tariff} {phase}"
+      },
+      "heat_energy": {
+        "name": "Heat energy"
+      },
+      "heat_energy_tariff": {
+        "name": "Heat energy tariff {tariff}"
+      },
+      "heat_energy_phase": {
+        "name": "Heat energy {phase}"
+      },
+      "heat_energy_tariff_phase": {
+        "name": "Heat energy tariff {tariff} {phase}"
+      },
+      "volume": {
+        "name": "Volume"
+      },
+      "volume_tariff": {
+        "name": "Volume tariff {tariff}"
+      },
+      "volume_phase": {
+        "name": "Volume {phase}"
+      },
+      "volume_tariff_phase": {
+        "name": "Volume tariff {tariff} {phase}"
+      },
+      "flow": {
+        "name": "Flow"
+      },
+      "flow_tariff": {
+        "name": "Flow tariff {tariff}"
+      },
+      "flow_phase": {
+        "name": "Flow {phase}"
+      },
+      "flow_tariff_phase": {
+        "name": "Flow tariff {tariff} {phase}"
+      },
+      "flow_temperature": {
+        "name": "Flow temperature"
+      },
+      "flow_temperature_tariff": {
+        "name": "Flow temperature tariff {tariff}"
+      },
+      "flow_temperature_phase": {
+        "name": "Flow temperature {phase}"
+      },
+      "flow_temperature_tariff_phase": {
+        "name": "Flow temperature tariff {tariff} {phase}"
+      },
+      "return_temperature": {
+        "name": "Return temperature"
+      },
+      "return_temperature_tariff": {
+        "name": "Return temperature tariff {tariff}"
+      },
+      "return_temperature_phase": {
+        "name": "Return temperature {phase}"
+      },
+      "return_temperature_tariff_phase": {
+        "name": "Return temperature tariff {tariff} {phase}"
+      },
+      "operating_time": {
+        "name": "Operating time"
+      },
+      "operating_time_tariff": {
+        "name": "Operating time tariff {tariff}"
+      },
+      "operating_time_phase": {
+        "name": "Operating time {phase}"
+      },
+      "operating_time_tariff_phase": {
+        "name": "Operating time tariff {tariff} {phase}"
+      }
+    }
   }
 }

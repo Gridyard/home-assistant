@@ -30,5 +30,249 @@
     "abort": {
       "already_configured": "Das Gerät ist bereits eingerichtet"
     }
+  },
+  "entity": {
+    "sensor": {
+      "energy_import": {
+        "name": "Bezug"
+      },
+      "energy_import_tariff": {
+        "name": "Bezug Tarif {tariff}"
+      },
+      "energy_import_phase": {
+        "name": "Bezug {phase}"
+      },
+      "energy_import_tariff_phase": {
+        "name": "Bezug Tarif {tariff} {phase}"
+      },
+      "energy_export": {
+        "name": "Einspeisung"
+      },
+      "energy_export_tariff": {
+        "name": "Einspeisung Tarif {tariff}"
+      },
+      "energy_export_phase": {
+        "name": "Einspeisung {phase}"
+      },
+      "energy_export_tariff_phase": {
+        "name": "Einspeisung Tarif {tariff} {phase}"
+      },
+      "power": {
+        "name": "Leistung"
+      },
+      "power_tariff": {
+        "name": "Leistung Tarif {tariff}"
+      },
+      "power_phase": {
+        "name": "Leistung {phase}"
+      },
+      "power_tariff_phase": {
+        "name": "Leistung Tarif {tariff} {phase}"
+      },
+      "power_import": {
+        "name": "Bezugsleistung"
+      },
+      "power_import_tariff": {
+        "name": "Bezugsleistung Tarif {tariff}"
+      },
+      "power_import_phase": {
+        "name": "Bezugsleistung {phase}"
+      },
+      "power_import_tariff_phase": {
+        "name": "Bezugsleistung Tarif {tariff} {phase}"
+      },
+      "power_export": {
+        "name": "Einspeiseleistung"
+      },
+      "power_export_tariff": {
+        "name": "Einspeiseleistung Tarif {tariff}"
+      },
+      "power_export_phase": {
+        "name": "Einspeiseleistung {phase}"
+      },
+      "power_export_tariff_phase": {
+        "name": "Einspeiseleistung Tarif {tariff} {phase}"
+      },
+      "reactive_energy_import": {
+        "name": "Blindenergie Bezug"
+      },
+      "reactive_energy_import_tariff": {
+        "name": "Blindenergie Bezug Tarif {tariff}"
+      },
+      "reactive_energy_import_phase": {
+        "name": "Blindenergie Bezug {phase}"
+      },
+      "reactive_energy_import_tariff_phase": {
+        "name": "Blindenergie Bezug Tarif {tariff} {phase}"
+      },
+      "reactive_energy_export": {
+        "name": "Blindenergie Einspeisung"
+      },
+      "reactive_energy_export_tariff": {
+        "name": "Blindenergie Einspeisung Tarif {tariff}"
+      },
+      "reactive_energy_export_phase": {
+        "name": "Blindenergie Einspeisung {phase}"
+      },
+      "reactive_energy_export_tariff_phase": {
+        "name": "Blindenergie Einspeisung Tarif {tariff} {phase}"
+      },
+      "reactive_power": {
+        "name": "Blindleistung"
+      },
+      "reactive_power_tariff": {
+        "name": "Blindleistung Tarif {tariff}"
+      },
+      "reactive_power_phase": {
+        "name": "Blindleistung {phase}"
+      },
+      "reactive_power_tariff_phase": {
+        "name": "Blindleistung Tarif {tariff} {phase}"
+      },
+      "apparent_power": {
+        "name": "Scheinleistung"
+      },
+      "apparent_power_tariff": {
+        "name": "Scheinleistung Tarif {tariff}"
+      },
+      "apparent_power_phase": {
+        "name": "Scheinleistung {phase}"
+      },
+      "apparent_power_tariff_phase": {
+        "name": "Scheinleistung Tarif {tariff} {phase}"
+      },
+      "voltage": {
+        "name": "Spannung"
+      },
+      "voltage_tariff": {
+        "name": "Spannung Tarif {tariff}"
+      },
+      "voltage_phase": {
+        "name": "Spannung {phase}"
+      },
+      "voltage_tariff_phase": {
+        "name": "Spannung Tarif {tariff} {phase}"
+      },
+      "current": {
+        "name": "Strom"
+      },
+      "current_tariff": {
+        "name": "Strom Tarif {tariff}"
+      },
+      "current_phase": {
+        "name": "Strom {phase}"
+      },
+      "current_tariff_phase": {
+        "name": "Strom Tarif {tariff} {phase}"
+      },
+      "frequency": {
+        "name": "Frequenz"
+      },
+      "frequency_tariff": {
+        "name": "Frequenz Tarif {tariff}"
+      },
+      "frequency_phase": {
+        "name": "Frequenz {phase}"
+      },
+      "frequency_tariff_phase": {
+        "name": "Frequenz Tarif {tariff} {phase}"
+      },
+      "power_factor": {
+        "name": "Leistungsfaktor"
+      },
+      "power_factor_tariff": {
+        "name": "Leistungsfaktor Tarif {tariff}"
+      },
+      "power_factor_phase": {
+        "name": "Leistungsfaktor {phase}"
+      },
+      "power_factor_tariff_phase": {
+        "name": "Leistungsfaktor Tarif {tariff} {phase}"
+      },
+      "phase_angle": {
+        "name": "Phasenwinkel"
+      },
+      "phase_angle_tariff": {
+        "name": "Phasenwinkel Tarif {tariff}"
+      },
+      "phase_angle_phase": {
+        "name": "Phasenwinkel {phase}"
+      },
+      "phase_angle_tariff_phase": {
+        "name": "Phasenwinkel Tarif {tariff} {phase}"
+      },
+      "heat_energy": {
+        "name": "Wärmeenergie"
+      },
+      "heat_energy_tariff": {
+        "name": "Wärmeenergie Tarif {tariff}"
+      },
+      "heat_energy_phase": {
+        "name": "Wärmeenergie {phase}"
+      },
+      "heat_energy_tariff_phase": {
+        "name": "Wärmeenergie Tarif {tariff} {phase}"
+      },
+      "volume": {
+        "name": "Volumen"
+      },
+      "volume_tariff": {
+        "name": "Volumen Tarif {tariff}"
+      },
+      "volume_phase": {
+        "name": "Volumen {phase}"
+      },
+      "volume_tariff_phase": {
+        "name": "Volumen Tarif {tariff} {phase}"
+      },
+      "flow": {
+        "name": "Durchfluss"
+      },
+      "flow_tariff": {
+        "name": "Durchfluss Tarif {tariff}"
+      },
+      "flow_phase": {
+        "name": "Durchfluss {phase}"
+      },
+      "flow_tariff_phase": {
+        "name": "Durchfluss Tarif {tariff} {phase}"
+      },
+      "flow_temperature": {
+        "name": "Vorlauftemperatur"
+      },
+      "flow_temperature_tariff": {
+        "name": "Vorlauftemperatur Tarif {tariff}"
+      },
+      "flow_temperature_phase": {
+        "name": "Vorlauftemperatur {phase}"
+      },
+      "flow_temperature_tariff_phase": {
+        "name": "Vorlauftemperatur Tarif {tariff} {phase}"
+      },
+      "return_temperature": {
+        "name": "Rücklauftemperatur"
+      },
+      "return_temperature_tariff": {
+        "name": "Rücklauftemperatur Tarif {tariff}"
+      },
+      "return_temperature_phase": {
+        "name": "Rücklauftemperatur {phase}"
+      },
+      "return_temperature_tariff_phase": {
+        "name": "Rücklauftemperatur Tarif {tariff} {phase}"
+      },
+      "operating_time": {
+        "name": "Betriebsdauer"
+      },
+      "operating_time_tariff": {
+        "name": "Betriebsdauer Tarif {tariff}"
+      },
+      "operating_time_phase": {
+        "name": "Betriebsdauer {phase}"
+      },
+      "operating_time_tariff_phase": {
+        "name": "Betriebsdauer Tarif {tariff} {phase}"
+      }
+    }
   }
 }
