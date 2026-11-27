@@ -22,7 +22,6 @@ class GridyardCoordinator(DataUpdateCoordinator[State]):
 
     config_entry: GridyardConfigEntry
     device: DeviceInfo
-    model: str | None
 
     def __init__(
         self,
@@ -41,16 +40,9 @@ class GridyardCoordinator(DataUpdateCoordinator[State]):
         self.client = client
 
     async def _async_setup(self) -> None:
-        """Read device-info and the meter model once, for the device registry."""
-        self.model = None
+        """Read device-info once, for the device registry."""
         with _map_errors():
             self.device = await self.client.device_info()
-            if self.device.profile_id is None:
-                return
-            catalog = await self.client.profiles()
-        for profile in catalog.profiles:
-            if profile.id == self.device.profile_id:
-                self.model = profile.model
 
     async def _async_update_data(self) -> State:
         """Read state from the device."""

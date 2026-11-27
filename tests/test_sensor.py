@@ -51,14 +51,16 @@ async def test_sensors(
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
 
 
-@pytest.mark.usefixtures("mock_gridyard_client")
 async def test_device(
     hass: HomeAssistant,
     device_registry: dr.DeviceRegistry,
     mock_config_entry: MockConfigEntry,
+    mock_gridyard_client: AsyncMock,
 ) -> None:
     """Test the device shows the meter model of the active profile."""
     await setup_integration(hass, mock_config_entry)
+
+    mock_gridyard_client.profiles.assert_not_called()
 
     device = device_registry.async_get_device_by_identifier(
         (DOMAIN, DEVICE_ID), mock_config_entry.entry_id
@@ -77,9 +79,11 @@ async def test_device_without_profile(
     mock_config_entry: MockConfigEntry,
     mock_gridyard_client: AsyncMock,
 ) -> None:
-    """Test a device without profile has no model and the catalog is not read."""
+    """Test a device without profile has no model."""
     info = mock_gridyard_client.device_info.return_value
-    mock_gridyard_client.device_info.return_value = replace(info, profile_id=None)
+    mock_gridyard_client.device_info.return_value = replace(
+        info, profile_id=None, model=None
+    )
 
     await setup_integration(hass, mock_config_entry)
 
