@@ -7,7 +7,9 @@ target-version = "py314"
 select = ["ALL"]
 ignore = [
     "ANN401", # Dynamically typed expressions (typing.Any) are disallowed
-    "ARG001", # Home Assistant calls setup functions with a fixed signature
+    "ARG001", # Home Assistant calls setup functions and flow steps with a fixed signature
+    "ARG002",
+    "ARG004",
     "COM812", # incompatible with the formatter
     "CPY001", # the license is in LICENSE, not in file headers
     "D203",   # incompatible with the formatter
