@@ -1,6 +1,7 @@
 """Common fixtures for the gridyard tests."""
 
 from collections.abc import Generator
+from dataclasses import replace
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -73,3 +74,16 @@ def mock_gridyard_client() -> Generator[AsyncMock]:
         )
         client.profiles.return_value = CATALOG
         yield client
+
+
+@pytest.fixture
+def device_without_profile(mock_gridyard_client: AsyncMock) -> AsyncMock:
+    """Return the mock client for a device without profile and without live record."""
+    info = mock_gridyard_client.device_info.return_value
+    mock_gridyard_client.device_info.return_value = replace(
+        info, profile_id=None, model=None
+    )
+    mock_gridyard_client.state.return_value = State.from_json(
+        load_json_object_fixture("state-without-record.json")
+    )
+    return mock_gridyard_client

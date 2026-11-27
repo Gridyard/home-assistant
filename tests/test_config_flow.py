@@ -1,6 +1,5 @@
 """Test the gridyard config flow."""
 
-from dataclasses import replace
 from unittest.mock import AsyncMock
 
 import pytest
@@ -12,7 +11,11 @@ from gridyard import (
     InvalidAuth,
     ProfileUnknown,
 )
-from homeassistant.config_entries import SOURCE_USER, ConfigFlowResult
+from homeassistant.config_entries import (
+    SOURCE_USER,
+    ConfigEntryState,
+    ConfigFlowResult,
+)
 from homeassistant.const import CONF_HOST
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
@@ -140,14 +143,6 @@ async def test_user_flow_already_configured(
     assert result["reason"] == "already_configured"
 
 
-@pytest.fixture
-def device_without_profile(mock_gridyard_client: AsyncMock) -> AsyncMock:
-    """Return the mock client for a device that has no profile yet."""
-    info = mock_gridyard_client.device_info.return_value
-    mock_gridyard_client.device_info.return_value = replace(info, profile_id=None)
-    return mock_gridyard_client
-
-
 async def start_profile_step(hass: HomeAssistant) -> str:
     """Start the flow up to the profile step and return the flow id."""
     flow_id = await start_flow(hass)
@@ -200,6 +195,8 @@ async def test_profile_flow(
 
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["data"] == {CONF_HOST: HOST, CONF_SETUP_CODE: SETUP_CODE}
+    # The mock still reports no profile and no live record; setup copes with that.
+    assert result["result"].state is ConfigEntryState.LOADED
     device_without_profile.set_profile.assert_awaited_once_with("sml-ebz-dd3")
     device_without_profile.set_meter_key.assert_not_called()
 
