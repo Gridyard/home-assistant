@@ -63,6 +63,32 @@ unavailable; the diagnostic sensors say why.
 as grid consumption and *Energy export* as return to grid. Prices are set there too; the integration has no tariff
 settings of its own.
 
+### evcc
+
+[evcc](https://evcc.io) uses the device as its grid meter through Home Assistant, with the *Home Assistant* meter of
+evcc ([documentation](https://docs.evcc.io/en/smarthome/home-assistant), evcc 0.319.1):
+
+1. In evcc under **Configuration**, add the grid meter and choose *Home Assistant* as the manufacturer.
+2. Choose your Home Assistant instance and authorise evcc; Home Assistant opens its login page for that.
+3. Assign the sensors of the device, then select **Validate & save**:
+
+| evcc field | Sensor |
+| --- | --- |
+| Power Entity | *Power* |
+| Energy Entity | *Energy import* |
+| Return Energy Entity | *Energy export* |
+| L1–L3 Current Entity, L1–L3 Voltage Entity (optional) | *Current L1* to *L3*, *Voltage L1* to *L3* |
+
+*Power* is positive for import from the grid and negative for export, as evcc expects of a grid meter. If your meter
+reports only *Power import* and *Power export*, create a template sensor helper in Home Assistant with the unit W and
+the following state, and assign it as *Power Entity*. While a sensor is unavailable, the helper stays unknown
+instead of reporting a wrong value:
+
+```jinja
+{{ (states('sensor.sm_xxxxxx_power_import') | float - states('sensor.sm_xxxxxx_power_export') | float)
+   if has_value('sensor.sm_xxxxxx_power_import') and has_value('sensor.sm_xxxxxx_power_export') else none }}
+```
+
 ### Options
 
 Under **Configure** on the integration entry you can change the meter profile, set a new meter key and switch the
