@@ -66,7 +66,8 @@
       "already_configured": "Device is already configured",
       "api_unsupported": "The firmware of the device does not support Home Assistant yet. Update the device first.",
       "reauth_successful": "The setup code was updated",
-      "wrong_device": "This setup code belongs to another device"
+      "wrong_device": "This setup code belongs to another device",
+      "invalid_discovery_info": "The device announced itself without an ID"
     },
     "progress": {
       "send_settings": "The device restarts with the new settings. This takes up to a minute."

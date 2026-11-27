@@ -120,7 +120,9 @@ class GridyardConfigFlow(ConfigFlow, domain=DOMAIN):
         properties = discovery_info.properties
         if properties.get("api") != str(API):
             return self.async_abort(reason="api_unsupported")
-        device_id = properties["id"]
+        device_id = properties.get("id")
+        if not device_id:
+            return self.async_abort(reason="invalid_discovery_info")
         await self.async_set_unique_id(device_id)
         # The address, not the mDNS name, so the entry does not depend on mDNS.
         self._abort_if_unique_id_configured(updates={CONF_HOST: discovery_info.host})
@@ -146,7 +148,7 @@ class GridyardConfigFlow(ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
         if user_input is not None:
             info, errors = await self._async_check_setup_code(
-                user_input[CONF_SETUP_CODE]
+                user_input[CONF_SETUP_CODE], read_catalog=True
             )
             if info is not None:
                 await self.async_set_unique_id(info.device_id)
@@ -174,7 +176,7 @@ class GridyardConfigFlow(ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
         if user_input is not None:
             info, errors = await self._async_check_setup_code(
-                user_input[CONF_SETUP_CODE]
+                user_input[CONF_SETUP_CODE], read_catalog=False
             )
             if info is not None:
                 await self.async_set_unique_id(info.device_id)
@@ -191,15 +193,19 @@ class GridyardConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
     async def _async_check_setup_code(
-        self, typed_code: str
+        self, typed_code: str, *, read_catalog: bool
     ) -> tuple[DeviceInfo | None, dict[str, str]]:
-        """Normalize the code and open a session; return device-info or form errors."""
+        """Normalize the code and open a session; return device-info or form errors.
+
+        Setup also reads the catalog when the device has no profile yet; reauth
+        only checks the code.
+        """
         self._setup_code = normalize_setup_code(typed_code)
         if SETUP_CODE_PATTERN.fullmatch(self._setup_code) is None:
             # A wrong code would also lock the device for up to 300 s.
             return None, {CONF_SETUP_CODE: "invalid_setup_code"}
         try:
-            return await self._async_read_device(), {}
+            return await self._async_read_device(read_catalog=read_catalog), {}
         except CannotConnect:
             return None, {"base": "cannot_connect"}
         except InvalidAuth:
@@ -292,11 +298,11 @@ class GridyardConfigFlow(ConfigFlow, domain=DOMAIN):
         error, self._send_error = self._send_error, None
         return {} if error is None else {"base": error}
 
-    async def _async_read_device(self) -> DeviceInfo:
-        """Read device-info, and the catalog if the device has no profile yet."""
+    async def _async_read_device(self, *, read_catalog: bool) -> DeviceInfo:
+        """Read device-info, and the catalog if asked and the device has no profile."""
         async with self._client() as client:
             info = await client.device_info()
-            if info.profile_id is None:
+            if read_catalog and info.profile_id is None:
                 self._catalog = await client.profiles()
         return info
 

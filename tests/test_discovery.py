@@ -25,8 +25,11 @@ from .conftest import DEVICE_ID, HOST, SETUP_CODE
 NEW_HOST = "192.0.2.20"
 
 
-def discovery(api: str = "1") -> ZeroconfServiceInfo:
+def discovery(api: str = "1", device_id: str | None = DEVICE_ID) -> ZeroconfServiceInfo:
     """Return the mDNS announcement of the test device (synthetic)."""
+    properties = {"fw": "v0.5.0", "api": api, "mode": "local"}
+    if device_id is not None:
+        properties["id"] = device_id
     return ZeroconfServiceInfo(
         ip_address=ip_address(NEW_HOST),
         ip_addresses=[ip_address(NEW_HOST)],
@@ -34,7 +37,7 @@ def discovery(api: str = "1") -> ZeroconfServiceInfo:
         hostname="sm-6789ab.local.",
         type="_gridyard._tcp.local.",
         name="SM-6789AB._gridyard._tcp.local.",
-        properties={"id": DEVICE_ID, "fw": "v0.5.0", "api": api, "mode": "local"},
+        properties=properties,
     )
 
 
@@ -97,6 +100,16 @@ async def test_other_api(hass: HomeAssistant) -> None:
     assert result["reason"] == "api_unsupported"
 
 
+async def test_announcement_without_id(hass: HomeAssistant) -> None:
+    """Test another device announcing _gridyard._tcp without an ID."""
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_ZEROCONF}, data=discovery(device_id=None)
+    )
+
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "invalid_discovery_info"
+
+
 async def test_rejected_code_starts_reauth(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
@@ -140,6 +153,7 @@ async def test_reauth(
 
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "reauth_successful"
+    mock_gridyard_client.profiles.assert_not_called()
     assert mock_config_entry.data == {CONF_HOST: HOST, CONF_SETUP_CODE: "BBBBCCCCDDDD"}
 
 
@@ -162,3 +176,20 @@ async def test_reauth_other_device(
 
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "wrong_device"
+
+
+async def test_reauth_reads_no_catalog(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    device_without_profile: AsyncMock,
+) -> None:
+    """Test reauth of a device without profile only checks the code."""
+    await setup_integration(hass, mock_config_entry)
+    result = await mock_config_entry.start_reauth_flow(hass)
+
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], {CONF_SETUP_CODE: SETUP_CODE}
+    )
+
+    assert result["reason"] == "reauth_successful"
+    device_without_profile.profiles.assert_not_called()

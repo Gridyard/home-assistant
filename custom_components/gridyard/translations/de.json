@@ -66,7 +66,8 @@
       "already_configured": "Das Gerät ist bereits eingerichtet",
       "api_unsupported": "Die Firmware des Geräts unterstützt Home Assistant noch nicht. Aktualisiere zuerst das Gerät.",
       "reauth_successful": "Der Setup-Code wurde aktualisiert",
-      "wrong_device": "Dieser Setup-Code gehört zu einem anderen Gerät"
+      "wrong_device": "Dieser Setup-Code gehört zu einem anderen Gerät",
+      "invalid_discovery_info": "Das Gerät hat sich ohne Kennung gemeldet"
     },
     "progress": {
       "send_settings": "Das Gerät startet mit den neuen Einstellungen neu. Das dauert bis zu einer Minute."
