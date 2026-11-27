@@ -18,6 +18,24 @@
         "data_description": {
           "setup_code": "12 characters. Case, spaces and hyphens do not matter."
         }
+      },
+      "profile": {
+        "description": "Choose the profile of your electricity meter. Type to search by manufacturer and model.",
+        "data": {
+          "profile": "Meter profile"
+        },
+        "data_description": {
+          "profile": "The device restarts with the profile; this takes up to a minute."
+        }
+      },
+      "meter_key": {
+        "description": "This meter encrypts its data. Enter the key you got from your grid operator.",
+        "data": {
+          "meter_key": "Meter key"
+        },
+        "data_description": {
+          "meter_key": "32 hexadecimal characters. Spaces do not matter."
+        }
       }
     },
     "error": {
@@ -25,10 +43,47 @@
       "cannot_connect": "Failed to connect",
       "invalid_auth": "The device rejected the setup code",
       "invalid_setup_code": "A setup code has 12 characters: digits and letters except I, L, O and U",
-      "unknown": "Unexpected error"
+      "unknown": "Unexpected error",
+      "invalid_profile": "Choose a profile from the list",
+      "invalid_meter_key": "A meter key has 32 hexadecimal characters (0-9, A-F)",
+      "profile_unknown": "The device does not know this profile",
+      "not_applied": "The device did not report the new profile within a minute"
     },
     "abort": {
       "already_configured": "Device is already configured"
+    },
+    "progress": {
+      "send_settings": "The device restarts with the new settings. This takes up to a minute."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "description": "Profile and key are stored on the device. Changing them restarts it.",
+        "data": {
+          "profile": "Meter profile",
+          "meter_key": "New meter key",
+          "update_check": "Check for firmware updates"
+        },
+        "data_description": {
+          "meter_key": "Leave empty to keep the key on the device.",
+          "update_check": "Home Assistant offers new firmware for the device."
+        }
+      }
+    },
+    "progress": {
+      "send_settings": "The device restarts with the new settings. This takes up to a minute."
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "unknown": "Unexpected error",
+      "invalid_profile": "Choose a profile from the list",
+      "invalid_meter_key": "A meter key has 32 hexadecimal characters (0-9, A-F)",
+      "profile_unknown": "The device does not know this profile",
+      "not_applied": "The device did not report the new profile within a minute"
+    },
+    "abort": {
+      "cannot_connect": "Failed to connect"
     }
   },
   "entity": {

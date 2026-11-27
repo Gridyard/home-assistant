@@ -23,6 +23,7 @@ CATALOG = Catalog(
     catalog="caf9acc67c01abf6",
     profiles=(
         Profile(id="iec-apator-12ec3", model="Apator 12EC3", rev=1, encrypted=False),
+        Profile(id="dlms-iskra-am550", model="Iskra AM550", rev=1, encrypted=True),
         Profile(id="sml-ebz-dd3", model="eBZ DD3", rev=1, encrypted=False),
     ),
 )

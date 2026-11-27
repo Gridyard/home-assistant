@@ -18,6 +18,24 @@
         "data_description": {
           "setup_code": "12 Zeichen. Groß- und Kleinschreibung, Leerzeichen und Bindestriche spielen keine Rolle."
         }
+      },
+      "profile": {
+        "description": "Wähle das Profil deines Stromzählers. Tippe, um nach Hersteller und Modell zu suchen.",
+        "data": {
+          "profile": "Zählerprofil"
+        },
+        "data_description": {
+          "profile": "Das Gerät startet mit dem Profil neu, das dauert bis zu einer Minute."
+        }
+      },
+      "meter_key": {
+        "description": "Dieser Zähler verschlüsselt seine Daten. Gib den Schlüssel von deinem Netzbetreiber ein.",
+        "data": {
+          "meter_key": "Zählerschlüssel"
+        },
+        "data_description": {
+          "meter_key": "32 Hexadezimalzeichen. Leerzeichen spielen keine Rolle."
+        }
       }
     },
     "error": {
@@ -25,10 +43,47 @@
       "cannot_connect": "Verbindung fehlgeschlagen",
       "invalid_auth": "Das Gerät hat den Setup-Code abgelehnt",
       "invalid_setup_code": "Ein Setup-Code hat 12 Zeichen: Ziffern und Buchstaben außer I, L, O und U",
-      "unknown": "Unerwarteter Fehler"
+      "unknown": "Unerwarteter Fehler",
+      "invalid_profile": "Wähle ein Profil aus der Liste",
+      "invalid_meter_key": "Ein Zählerschlüssel hat 32 Hexadezimalzeichen (0–9, A–F)",
+      "profile_unknown": "Das Gerät kennt dieses Profil nicht",
+      "not_applied": "Das Gerät hat das neue Profil nicht innerhalb einer Minute gemeldet"
     },
     "abort": {
       "already_configured": "Das Gerät ist bereits eingerichtet"
+    },
+    "progress": {
+      "send_settings": "Das Gerät startet mit den neuen Einstellungen neu. Das dauert bis zu einer Minute."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "description": "Profil und Schlüssel liegen auf dem Gerät. Eine Änderung startet es neu.",
+        "data": {
+          "profile": "Zählerprofil",
+          "meter_key": "Neuer Zählerschlüssel",
+          "update_check": "Nach Firmware-Updates suchen"
+        },
+        "data_description": {
+          "meter_key": "Leer lassen, um den Schlüssel auf dem Gerät zu behalten.",
+          "update_check": "Home Assistant bietet neue Firmware für das Gerät an."
+        }
+      }
+    },
+    "progress": {
+      "send_settings": "Das Gerät startet mit den neuen Einstellungen neu. Das dauert bis zu einer Minute."
+    },
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "unknown": "Unerwarteter Fehler",
+      "invalid_profile": "Wähle ein Profil aus der Liste",
+      "invalid_meter_key": "Ein Zählerschlüssel hat 32 Hexadezimalzeichen (0–9, A–F)",
+      "profile_unknown": "Das Gerät kennt dieses Profil nicht",
+      "not_applied": "Das Gerät hat das neue Profil nicht innerhalb einer Minute gemeldet"
+    },
+    "abort": {
+      "cannot_connect": "Verbindung fehlgeschlagen"
     }
   },
   "entity": {
