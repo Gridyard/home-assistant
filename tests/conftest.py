@@ -10,6 +10,8 @@ from pytest_homeassistant_custom_component.common import (
     MockConfigEntry,
     load_json_object_fixture,
 )
+from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
+from syrupy.assertion import SnapshotAssertion
 
 from custom_components.gridyard.const import CONF_SETUP_CODE, DOMAIN
 
@@ -29,6 +31,16 @@ CATALOG = Catalog(
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
     """Load integrations from custom_components in every test."""
+
+
+@pytest.fixture
+def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
+    """Use the Home Assistant snapshot extension.
+
+    pytest-homeassistant-custom-component sets it in a plugin fixture, which the
+    syrupy plugin overrides when pytest loads syrupy later.
+    """
+    return snapshot.use_extension(HomeAssistantSnapshotExtension)
 
 
 @pytest.fixture
