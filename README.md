@@ -69,7 +69,8 @@ settings of its own.
 evcc ([documentation](https://docs.evcc.io/en/smarthome/home-assistant), evcc 0.319.1):
 
 1. In evcc under **Configuration**, add the grid meter and choose *Home Assistant* as the manufacturer.
-2. Choose your Home Assistant instance and authorise evcc; Home Assistant opens its login page for that.
+2. Choose your Home Assistant instance and authorise evcc; Home Assistant opens its login page for that. If evcc
+   runs as an app in Home Assistant, choose `http://supervisor/core`; it is authorised already.
 3. Assign the sensors of the device, then select **Validate & save**:
 
 | evcc field | Sensor |
